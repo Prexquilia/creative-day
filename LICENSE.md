@@ -1,4 +1,4 @@
-# The MIIT License (MIT)
+# The MIT License (MIT)
 
 Copyright 2020 — Markus Mayer
 
