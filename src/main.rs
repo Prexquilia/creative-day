@@ -6,7 +6,7 @@ use crate::capture::Capture;
 use crate::window::Window;
 use opencv::core::{Rect, Scalar, Size};
 use opencv::{highgui, imgproc, objdetect, prelude::*, types};
-use std::time::{Instant};
+use std::time::Instant;
 
 type Result<T> = opencv::Result<T>;
 
