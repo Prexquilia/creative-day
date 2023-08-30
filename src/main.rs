@@ -17,6 +17,7 @@ fn run() -> Result<()> {
     let mut classifier = objdetect::CascadeClassifier::new("./haarcascade_frontalface_alt2.xml")?;
 
     let mut capture = Capture::create_default()?;
+    
     let opened = capture.is_opened()?;
     if !opened {
         panic!("Unable to open default camera!");

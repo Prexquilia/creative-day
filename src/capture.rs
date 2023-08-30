@@ -12,7 +12,9 @@ impl Capture {
     }
 
     pub fn create(index: i32) -> Result<Self> {
-        let capture = videoio::VideoCapture::new(index, videoio::CAP_ANY)?;
+        //let capture = videoio::VideoCapture::new(index, videoio::CAP_ANY)?;
+        let file_name = "/home/oem/creative-day/local/IMG_0.MOV";
+        let capture = videoio::VideoCapture::from_file(&file_name, videoio::CAP_ANY)?;
         Ok(Self { capture })
     }
 
