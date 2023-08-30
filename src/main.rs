@@ -1,12 +1,13 @@
 mod capture;
 mod window;
+mod face_location;
 
 extern crate opencv;
 use crate::capture::Capture;
 use crate::window::Window;
 use opencv::core::{Rect, Scalar, Size};
 use opencv::{highgui, imgproc, objdetect, prelude::*, types};
-use std::time::{Instant};
+use std::time::Instant;
 
 type Result<T> = opencv::Result<T>;
 
@@ -52,14 +53,18 @@ fn run_main_loop(
         opencv::imgproc::cvt_color(&frame, &mut preprocessed, opencv::imgproc::COLOR_BGR2GRAY, 0)?;
         // let preprocessed = preprocess_image(&frame)?;
 
+        let my_box = Rect{x:400,y:200,height:500, width:500};
+        draw_box(&mut frame, my_box, Scalar::new(255f64, 0f64, 0f64, -1f64))?;
+
         let faces = detect_faces(classifier, preprocessed)?;
         for face in faces.iter() {
-            draw_box_around_face(&mut frame, face)?;
+            if face_location::is_face_in_box(face, my_box) {
+                draw_box_around_face(&mut frame, face)?;
+            } 
         }
 
         window.show_image(&frame)?;
 
-        println!("found {} faces in {} ms", faces.len(), start.elapsed().as_millis());
     }
 }
 
@@ -111,7 +116,7 @@ fn detect_faces(
         2,
         0,
         opencv::core::Size_ { width: 30, height: 30 },
-        opencv::core::Size_ { width: 0, height: 0 }
+        opencv::core::Size_ { width: 50, height: 50 }
     ) {
         Err(err) => println!("{}", err),
         Ok(_) => ()
@@ -133,6 +138,22 @@ fn draw_box_around_face(frame: &mut Mat, face: Rect) -> Result<()> {
     let color_red = Scalar::new(0f64, 0f64, 255f64, -1f64);
 
     imgproc::rectangle(frame, scaled_face, color_red, THICKNESS, LINE_TYPE, SHIFT)?;
+    draw_box(frame, scaled_face, color_red)
+}
+
+fn draw_box(frame: &mut Mat, box_: Rect, color: Scalar) -> Result<()> {
+    let scaled_face = Rect {
+        x: box_.x,
+        y: box_.y,
+        width: box_.width,
+        height: box_.height,
+    };
+
+    const THICKNESS: i32 = 2;
+    const LINE_TYPE: i32 = 8;
+    const SHIFT: i32 = 0;
+
+    imgproc::rectangle(frame, scaled_face, color, THICKNESS, LINE_TYPE, SHIFT)?;
     Ok(())
 }
 
