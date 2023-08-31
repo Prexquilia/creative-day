@@ -36,6 +36,7 @@ fn run_main_loop(
     classifier: &mut objdetect::CascadeClassifier,
     window: &Window,
 ) -> Result<()> {
+    let mut face_tracker = std::vec::new<>();
     loop {
         const KEY_CODE_ESCAPE: i32 = 27;
         if let Ok(KEY_CODE_ESCAPE) = highgui::wait_key(10) {
