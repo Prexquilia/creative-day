@@ -111,7 +111,7 @@ fn detect_faces(
         2,
         0,
         opencv::core::Size_ { width: 30, height: 30 },
-        opencv::core::Size_ { width: 0, height: 0 }
+        opencv::core::Size_ { width: 50, height: 50 }
     ) {
         Err(err) => println!("{}", err),
         Ok(_) => ()
